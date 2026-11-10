@@ -191,8 +191,20 @@ async function handleRequest(req, res) {
     return res.end();
   }
 
-  const urlObj = new URL(req.url, `http://${req.headers.host || "localhost"}`);
-  const pathname = urlObj.pathname;
+  const rawUrl =
+    req.headers["x-matched-path"] ||
+    req.headers["x-vercel-matched-path"] ||
+    req.headers["x-forwarded-uri"] ||
+    req.url;
+  const urlObj = new URL(rawUrl, `http://${req.headers.host || "localhost"}`);
+  let pathname = urlObj.pathname;
+
+  if (req.query && req.query.slug) {
+    const slugPath = Array.isArray(req.query.slug) ? req.query.slug.join("/") : req.query.slug;
+    if (pathname.includes("[...slug]") || pathname.includes("api/index") || pathname === "/api") {
+      pathname = "/api/" + slugPath;
+    }
+  }
 
   // --------------------------------------------------------------------------
   // API: GET /api/status
