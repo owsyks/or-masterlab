@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OR MasterLab — Operations Research &amp; AI Workbench (NVIDIA NIM)</title>
+  <!-- KaTeX (loaded synchronously so math always renders immediately) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <!-- Marked -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ================================================================== -->
+    <!-- LEFT SIDEBAR NAVIGATION                                            -->
+    <!-- ================================================================== -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div class="sidebar-brand">
+        <div class="logo-mark">OR</div>
+        <div class="brand-text">
+          <div class="brand-name">OR MasterLab</div>
+          <div class="brand-meta">ING3-SI • Univ. Oran 1</div>
+        </div>
+      </div>
+
+      <!-- Study Progress Widget -->
+      <div class="progress-widget">
+        <div class="flex-between small">
+          <span class="font-semibold">Module Mastery</span>
+          <span class="text-accent font-bold" id="progressPercentText">28%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBarFill" style="width: 28%"></div>
+        </div>
+        <div class="progress-sub" id="progressSubText">2 / 7 chapters mastered</div>
+      </div>
+
+      <div class="sidebar-section-label">LEARNING &amp; PRACTICE</div>
+      <nav class="sidebar-nav">
+        <button class="side-link active" data-view="dashboard">
+          <span class="side-icon">🏠</span>
+          <span class="side-text">Dashboard</span>
+        </button>
+        <button class="side-link" data-view="chapters">
+          <span class="side-icon">📖</span>
+          <span class="side-text">Chapters &amp; "How-To"</span>
+          <span class="side-pill">7 Ch.</span>
+        </button>
+        <button class="side-link" data-view="solvers">
+          <span class="side-icon">🧮</span>
+          <span class="side-text">Visual Solvers</span>
+          <span class="side-pill pill-emerald">Lab</span>
+        </button>
+        <button class="side-link" data-view="exercises">
+          <span class="side-icon">📚</span>
+          <span class="side-text">TDs &amp; Final Exam</span>
+          <span class="side-pill">13 Exos</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-section-label">NVIDIA NIM AI TOOLS</div>
+      <nav class="sidebar-nav">
+        <button class="side-link" data-view="renew">
+          <span class="side-icon">🎲</span>
+          <span class="side-text">AI Renew Exos</span>
+          <span class="side-pill pill-purple">Infinite</span>
+        </button>
+        <button class="side-link" data-view="corrector">
+          <span class="side-icon">📸</span>
+          <span class="side-text">AI OCR Corrector</span>
+          <span class="side-pill pill-amber">Vision</span>
+        </button>
+        <button class="side-link" data-view="teacher">
+          <span class="side-icon">🧑‍🏫</span>
+          <span class="side-text">Prof. OR (AI Teacher)</span>
+          <span class="side-pill pill-blue">24/7</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="nim-status-card" id="btnOpenApiModal">
+          <span class="pulse-dot"></span>
+          <div class="nim-status-info">
+            <div class="nim-title">NVIDIA NIM Active</div>
+            <div class="nim-sub" id="nimStatusText">Nemotron 3.5 VL 120B</div>
+          </div>
+          <span class="settings-gear">⚙️</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================================================================== -->
+    <!-- MAIN STAGE                                                         -->
+    <!-- ================================================================== -->
+    <div class="main-stage">
+      <!-- TOPBAR -->
+      <header class="stage-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" id="btnMobileMenu">☰</button>
+          <div class="breadcrumb" id="stageBreadcrumb">
+            🏠 Dashboard &amp; Exam Study Roadmap
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="quick-Search-wrap">
+            <button class="btn-topbar" id="btnQuickJumpExam" title="Jump directly to the Official Oran 1 Final Exam">
+              🔥 Official Final Exam
+            </button>
+          </div>
+          <button class="btn-topbar" id="btnThemeToggle" title="Toggle Light / Dark Mode">
+            ☀️ Light Mode
+          </button>
+          <button class="btn-topbar btn-topbar-ai" id="btnToggleAiDrawer">
+            👨‍🏫 Ask Prof. OR
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT SCROLL CONTAINER -->
+      <main class="stage-content">
+
+        <!-- ============================================================== -->
+        <!-- VIEW 0: DASHBOARD (HOME OVERVIEW)                              -->
+        <!-- ============================================================== -->
+        <section class="view-panel active" id="view-dashboard">
+          <div class="hero-banner">
+            <div class="hero-banner-text">
+              <div class="hero-eyebrow">✨ OPERATIONS RESEARCH PLATFORM • UNIVERSITÉ ORAN 1 (ING3-SI)</div>
+              <h1>Master every chapter, solve every TD, and ace your Final Exam.</h1>
+              <p>
+                Learn through intuitive visual analogies, step through Simplex tableaux and Branch-and-Bound trees interactively, generate fresh exam problems with <strong>AI Renew Exos</strong>, and scan your handwritten solutions with <strong>AI Vision OCR Corrector</strong>.
+              </p>
+              <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" data-goto="chapters">
+                  📖 Start Chapters &amp; "How-To" Guides
+                </button>
+                <button class="btn btn-emerald btn-lg" data-goto="solvers">
+                  🧮 Open Interactive Solvers
+                </button>
+                <button class="btn btn-secondary btn-lg" data-goto="corrector">
+                  📸 Scan &amp; Grade My Work (OCR)
+                </button>
+              </div>
+            </div>
+            <div class="hero-stats-grid">
+              <div class="stat-tile">
+                <div class="stat-num">7</div>
+                <div class="stat-label">Chapters &amp; Exam Recipes</div>
+              </div>
+              <div class="stat-tile">
+                <div class="stat-num">13</div>
+                <div class="stat-label">Solved TDs (1–4) &amp; Final Exam</div>
+              </div>
+              <div class="stat-tile">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Exact Mathematical Solvers</div>
+              </div>
+              <div class="stat-tile">
+                <div class="stat-num">120B</div>
+                <div class="stat-label">NVIDIA NIM Vision &amp; AI Model</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUICK AI TOOLS CARDS -->
+          <div class="section-heading-row mt-2">
+            <h2>⚡ Interactive Simulators &amp; AI Tools</h2>
+            <span class="muted small">Click any card to launch the tool</span>
+          </div>
+
+          <div class="feature-cards-grid">
+            <div class="feature-card" data-goto="solvers">
+              <div class="fc-icon fc-blue">📊</div>
+              <h3>Simplex, Big-M &amp; Sensitivity Simulator</h3>
+              <p>Step through Simplex pivots like a video player, inspect $c_j - z_j$, minimum ratios $b_i/a_{ie}$, the Dual LP, and stability ranges for $c_k$ and $b_i$.</p>
+              <span class="fc-cta">Open Solver Lab →</span>
+            </div>
+
+            <div class="feature-card" data-goto="renew">
+              <div class="fc-icon fc-purple">🎲</div>
+              <h3>AI Renew Exos (Infinite Generator)</h3>
+              <p>Generate brand-new practice problems on any chapter with 100% mathematically verified step-by-step solutions.</p>
+              <span class="fc-cta">Generate New Exercise →</span>
+            </div>
+
+            <div class="feature-card" data-goto="corrector">
+              <div class="fc-icon fc-amber">📸</div>
+              <h3>AI Corrector + Vision OCR</h3>
+              <p>Upload a photo of your handwritten paper or draw on the whiteboard: Vision AI transcribes your math, pinpoints sign or pivot errors, and grades you out of 20.</p>
+              <span class="fc-cta">Scan My Solution →</span>
+            </div>
+
+            <div class="feature-card" data-goto="teacher">
+              <div class="fc-icon fc-emerald">👨‍🏫</div>
+              <h3>Prof. OR — 24/7 AI Tutor</h3>
+              <p>Ask questions in English, French, or Darija. Get intuitive analogies, step-by-step proofs, or a rapid-fire exam quiz.</p>
+              <span class="fc-cta">Chat with Prof. OR →</span>
+            </div>
+          </div>
+
+          <!-- CHAPTERS ROADMAP GRID -->
+          <div class="section-heading-row mt-2">
+            <h2>🗺️ 7-Chapter Curriculum Roadmap &amp; Exam Priorities</h2>
+          </div>
+          <div class="roadmap-grid" id="dashboardRoadmapGrid">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 1: CHAPTERS & STEP-BY-STEP HOW-TO MASTERCLASS             -->
+        <!-- ============================================================== -->
+        <section class="view-panel" id="view-chapters">
+          <div class="chapters-Dirty-layout">
+            <!-- Horizontal Chapter Selector Strip -->
+            <div class="chapter-strip" id="chapterStrip">
+              <!-- Populated by app.js -->
+            </div>
+
+            <!-- Active Chapter Stage -->
+            <div id="chapterStageContainer">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 2: VISUAL INTERACTIVE SOLVERS                             -->
+        <!-- ============================================================== -->
+        <section class="view-panel" id="view-solvers">
+          <div class="segmented-tabs">
+            <button class="seg-btn active" data-solver="simplex">
+              📊 1. Simplex, Big-M, Sensitivity &amp; Dual
+            </button>
+            <button class="seg-btn" data-solver="graphical">
+              📐 2. 2D Graphical Plotter &amp; Parallel Lines ($\Delta$)
+            </button>
+            <button class="seg-btn" data-solver="knapsack">
+              🌳 3. Branch-and-Bound Tree (0/1 Knapsack)
+            </button>
+          </div>
+
+          <!-- SOLVER 2A: VISUAL SIMPLEX BUILDER & STEP-BY-STEP PLAYER -->
+          <div class="solver-pane active" id="solver-simplex">
+            <div class="solver-workbench-grid">
+              <!-- Left: Visual Equation Input Panel -->
+              <div class="card solver-config-card">
+                <div class="flex-between">
+                  <h3>⚙️ Linear Program Setup</h3>
+                  <select id="simplexPresetSelect" class="select-modern">
+                    <option value="exam1">🔥 Final Exam Ex 1 (Max 3x₁+2x₂)</option>
+                    <option value="td2ex5">📈 TD2 Ex 5 (Sensitivity c₁ &amp; b₂)</option>
+                    <option value="td2ex6">🚨 TD2 Ex 6 (Big-M: 2x₁+x₂ ≥ 6)</option>
+                    <option value="td2ex4">📘 TD2 Ex 4 (4 Variables x₁..x₄)</option>
+                    <option value="td3ex3">📱 TD3 Ex 3 (Mobile Phones + Dual)</option>
+                    <option value="td2ex8">🏭 TD2 Ex 8 (Mecanex Corp.)</option>
+                  </select>
+                </div>
+
+                <!-- Visual Objective Builder -->
+                <div class="builder-section mt-1">
+                  <div class="flex-between">
+                    <label class="builder-label">1. Objective Function</label>
+                    <div class="var-count-controls">
+                      <button class="btn-chip" id="btnRemoveVar" title="Remove a variable">− Var</button>
+                      <span class="small muted" id="varCountDisplay">2 variables</span>
+                      <button class="btn-chip" id="btnAddVar" title="Add a variable">+ Var</button>
+                    </div>
+                  </div>
+                  <div class="visual-eq-row mt-05">
+                    <select id="simplexObjType" class="select-modern w-auto">
+                      <option value="max">MAX Z =</option>
+                      <option value="min">MIN Z =</option>
+                    </select>
+                    <div class="eq-terms-wrap" id="visualObjInputs">
+                      <!-- Populated dynamically -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Visual Constraints Builder -->
+                <div class="builder-section mt-1">
+                  <div class="flex-between">
+                    <label class="builder-label">2. Linear Constraints ($b_i$)</label>
+                    <button class="btn-chip btn-chip-primary" id="btnAddConstraint">+ Add Constraint</button>
+                  </div>
+                  <div class="constraints-stack mt-05" id="visualConstraintsList">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <div class="action-bar mt-1">
+                  <button class="btn btn-primary w-full" id="btnRunSimplex">
+                    🚀 Solve &amp; Generate Step-by-Step Tableaux
+                  </button>
+                  <button class="btn btn-secondary w-full" id="btnAskTeacherSimplex">
+                    👨‍🏫 Ask Prof. OR to Explain This Problem
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right: Interactive Step-by-Step Tableau Player & Results -->
+              <div class="solver-results-col" id="simplexOutputArea">
+                <!-- Populated by app.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- SOLVER 2B: 2D GRAPHICAL PLOTTER -->
+          <div class="solver-pane" id="solver-graphical">
+            <div class="solver-workbench-grid">
+              <div class="card solver-config-card">
+                <div class="flex-between">
+                  <h3>📐 2D Model ($x_1, x_2$)</h3>
+                  <select id="graphPresetSelect" class="select-modern">
+                    <option value="td1ex2">🚗 TD1 Ex 2: Cars (10x₁+16x₂)</option>
+                    <option value="exam1">🔥 Final Exam Ex 1 (3x₁+2x₂)</option>
+                    <option value="td1z1">📘 TD1 (Z₁, C₁): Unique Optimum</option>
+                    <option value="td1z2">📗 TD1 (Z₂, C₂): Optimal Edge</option>
+                    <option value="td1z3">📙 TD1 (Z₃, C₃): Excluding Origin</option>
+                    <option value="td1z5">🚀 TD1 (Z₅, C₅): Unbounded Region</option>
+                  </select>
+                </div>
+
+                <div class="builder-section mt-1">
+                  <label class="builder-label">2D Objective Function</label>
+                  <div class="visual-eq-row mt-05">
+                    <select id="graphObjType" class="select-modern w-auto">
+                      <option value="max">MAX Z =</option>
+                      <option value="min">MIN Z =</option>
+                    </select>
+                    <input type="number" id="graphC1" class="coeff-input" value="10" step="any" />
+                    <span class="math-var">$x_1 +$</span>
+                    <input type="number" id="graphC2" class="coeff-input" value="16" step="any" />
+                    <span class="math-var">$x_2$</span>
+                  </div>
+                </div>
+
+                <div class="builder-section mt-1">
+                  <div class="flex-between">
+                    <label class="builder-label">2D Constraints</label>
+                    <button class="btn-chip btn-chip-primary" id="btnAddGraphCon">+ Constraint</button>
+                  </div>
+                  <div class="constraints-stack mt-05" id="visualGraphConstraints">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <button class="btn btn-primary w-full mt-1" id="btnRunGraph">
+                  📐 Plot Feasible Region &amp; Find Vertices
+                </button>
+
+                <div class="mt-1" id="graphSummaryCard">
+                  <!-- Vertex table populated by app.js -->
+                </div>
+              </div>
+
+              <div class="card canvas-stage-card">
+                <div class="canvas-control-bar">
+                  <div class="slider-group">
+                    <span class="font-semibold">Slide Parallel Iso-Profit Line $\Delta_Z$:</span>
+                    <input type="range" id="isoProfitSlider" min="0" max="115" value="100" class="modern-slider" />
+                  </div>
+                  <div class="badge badge-emerald" id="isoProfitLabel">Z = --</div>
+                </div>
+                <div class="canvas-container">
+                  <canvas id="lpGraphCanvas" width="760" height="540"></canvas>
+                </div>
+                <div class="canvas-legend">
+                  <span><i class="dot dot-emerald"></i> Feasible Region ($\mathcal{D}$)</span>
+                  <span><i class="dot dot-rose"></i> Iso-Profit Line ($\Delta_Z$)</span>
+                  <span><i class="dot dot-white"></i> Corner Vertices ($A, B, C\dots$)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SOLVER 2C: KNAPSACK BRANCH & BOUND VISUAL TREE -->
+          <div class="solver-pane" id="solver-knapsack">
+            <div class="solver-workbench-grid">
+              <div class="card solver-config-card">
+                <div class="flex-between">
+                  <h3>🎒 0/1 Knapsack Parameters</h3>
+                  <select id="knapsackPresetSelect" class="select-modern">
+                    <option value="exam2">🔥 Final Exam Ex 2 (W = 20 MDA)</option>
+                    <option value="td4ex2">🎒 Sheet 4 Ex 2 (W = 14)</option>
+                  </select>
+                </div>
+
+                <div class="builder-section mt-1">
+                  <label class="builder-label">Maximum Capacity / Budget ($W$)</label>
+                  <input type="number" id="knapsackCapacity" class="select-modern mt-05" value="20" step="any" />
+                </div>
+
+                <div class="builder-section mt-1">
+                  <div class="flex-between">
+                    <label class="builder-label">Items / Investments ($c_i, a_i$)</label>
+                    <button class="btn-chip btn-chip-primary" id="btnAddKnapsackItem">+ Item</button>
+                  </div>
+                  <div class="constraints-stack mt-05" id="visualKnapsackItems">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <button class="btn btn-primary w-full mt-1" id="btnRunKnapsack">
+                  🌳 Generate Visual Branch-and-Bound Tree
+                </button>
+              </div>
+
+              <div class="solver-results-col" id="knapsackOutputArea">
+                <!-- Populated with SVG Tree + Ratios table + Nodes -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 3: TD1-TD4 & EXAM BANK (MASTER-DETAIL WORKSPACE)          -->
+        <!-- ============================================================== -->
+        <section class="view-panel" id="view-exercises">
+          <div class="exo-master-detail">
+            <!-- Left Column: Filterable List of Exercises -->
+            <div class="exo-list-sidebar card">
+              <div class="exo-filter-chips" id="exoSheetFilters">
+                <button class="filter-chip active" data-sheet="ALL">All (13)</button>
+                <button class="filter-chip chip-hot" data-sheet="EXAM">🔥 Exam</button>
+                <button class="filter-chip" data-sheet="TD1">TD 1</button>
+                <button class="filter-chip" data-sheet="TD2">TD 2</button>
+                <button class="filter-chip" data-sheet="TD3">TD 3</button>
+                <button class="filter-chip" data-sheet="TD4">Sheet 4</button>
+              </div>
+              <input
+                type="search"
+                id="exoSearchInput"
+                class="search-input mt-05"
+                placeholder="🔍 Filter (e.g. dual, sensitivity, knapsack, Big-M)..."
+              />
+              <div class="exo-items-scroll mt-05" id="exerciseListNav">
+                <!-- Populated by app.js -->
+              </div>
+            </div>
+
+            <!-- Right Column: Selected Exercise Study Stage -->
+            <div class="exo-detail-stage" id="exerciseDetailStage">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 4: AI RENEW EXOS (INFINITE GENERATOR)                     -->
+        <!-- ============================================================== -->
+        <section class="view-panel" id="view-renew">
+          <div class="card renew-header-card">
+            <div class="renew-hero-grid">
+              <div>
+                <span class="badge badge-purple">🎲 HYBRID INFINITE GENERATOR (EXACT SOLVER + NVIDIA NIM AI)</span>
+                <h2 class="mt-05">AI Renew Exos — Generate Custom Practice Problems by Chapter &amp; Difficulty</h2>
+                <p class="muted">
+                  Choose any Chapter (1–7) and Difficulty Mode (<strong>🟢 Easy / 🟡 Medium / 🔴 Hard</strong>): our mathematical engine generates guaranteed-solvable parameters and immediately computes the complete step-by-step reference solution (all intermediate Simplex tableaux, Dual, Sensitivity, or B&amp;B tree), while <strong>NVIDIA NIM AI</strong> supplies direct method rules, pivot keys, and exam traps without narrative fluff!
+                </p>
+              </div>
+              <div class="renew-form-box">
+                <div class="form-col">
+                  <label class="small font-semibold">Select Chapter (1 to 7):</label>
+                  <select id="renewTopicSelect" class="select-modern">
+                    <option value="ch1">📐 Chapter 1: LP Formulation &amp; 2D Graphical Method</option>
+                    <option value="ch2">🧱 Chapter 2: Standard Form, Slack Variables &amp; Algebraic Simplex</option>
+                    <option value="ch3">📊 Chapter 3: Simplex Method in Tableaux (Full Pivots &amp; Row Ops)</option>
+                    <option value="ch4">🚨 Chapter 4: Special Cases, Degeneracy &amp; Big-M Method (≥ and =)</option>
+                    <option value="ch5">🔄 Chapter 5: Duality Theory &amp; Complementary Slackness</option>
+                    <option value="ch6">🎚️ Chapter 6: Post-Optimal / Sensitivity Analysis (Tableau Method)</option>
+                    <option value="ch7_knapsack">🎒 Chapter 7A (Exam Ex 2): Integer LP &amp; 0/1 Knapsack Branch-and-Bound</option>
+                    <option value="ch7_linear">✨ Chapter 7B (Exam Ex 3): Linearisation (Minimax &amp; Absolute Value)</option>
+                    <option value="exam_full">🔥 Full Oran 1 Exam Master Exercise (Simplex + Duality + Sensitivity)</option>
+                  </select>
+                </div>
+                <div class="form-row-2col mt-05">
+                  <div class="form-col">
+                    <label class="small font-semibold">Difficulty Mode:</label>
+                    <select id="renewDifficultySelect" class="select-modern">
+                      <option value="easy">🟢 Easy (Warm-Up / Clean Integers)</option>
+                      <option value="medium" selected>🟡 Medium (Standard TD Level)</option>
+                      <option value="hard">🔴 Hard (Full Exam Challenge)</option>
+                    </select>
+                  </div>
+                  <div class="form-col">
+                    <label class="small font-semibold">Language:</label>
+                    <select id="renewLangSelect" class="select-modern">
+                      <option value="en">🇬🇧 English</option>
+                      <option value="fr">🇫🇷 Français</option>
+                    </select>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-lg w-full mt-1" id="btnGenerateRenewExo">
+                  🎲 Generate Exercise &amp; Direct Solution
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="renewOutputContainer" class="mt-1">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 5: AI OCR CORRECTOR STUDIO (GENERATE + SOLVE + SCAN)      -->
+        <!-- ============================================================== -->
+        <section class="view-panel" id="view-corrector">
+          <!-- STEP 1 CARD: BUILT-IN AI CHAPTER EXERCISE GENERATOR (EASY / MEDIUM / HARD) -->
+          <div class="card ocr-generator-banner">
+            <div class="flex-between">
+              <div>
+                <span class="badge badge-purple">🎲 STEP 1: GENERATE A CHAPTER EXERCISE TO SOLVE ON PAPER</span>
+                <h2 class="mt-025">AI Practice Challenge + Vision OCR Grader</h2>
+                <p class="small muted">
+                  Pick a <strong>Chapter (1–7)</strong> and <strong>Difficulty Mode (Easy / Medium / Hard)</strong> below to generate a fresh exercise. Solve it on paper, then snap/upload your photo below for instant step-by-step AI grading!
+                </p>
+              </div>
+              <div class="action-bar">
+                <button class="btn btn-primary" id="btnOcrGenerateChallenge">
+                  🎲 Generate Exercise to Solve Now
+                </button>
+              </div>
+            </div>
+
+            <div class="ocr-gen-controls-grid mt-075">
+              <div class="form-col">
+                <label class="small font-semibold">📚 Choose Chapter:</label>
+                <select id="ocrGenChapterSelect" class="select-modern mt-025">
+                  <option value="ch1">📐 Chapter 1: LP Formulation &amp; 2D Graphical Method</option>
+                  <option value="ch2">🧱 Chapter 2: Standard Form, Slack Variables &amp; Algebraic Simplex</option>
+                  <option value="ch3" selected>📊 Chapter 3: Simplex Method in Tableaux (Full Pivots &amp; Row Ops)</option>
+                  <option value="ch4">🚨 Chapter 4: Special Cases, Degeneracy &amp; Big-M Method (≥ and =)</option>
+                  <option value="ch5">🔄 Chapter 5: Duality Theory &amp; Complementary Slackness</option>
+                  <option value="ch6">🎚️ Chapter 6: Post-Optimal / Sensitivity Analysis (Tableau Method)</option>
+                  <option value="ch7_knapsack">🎒 Chapter 7A: Integer LP &amp; 0/1 Knapsack Branch-and-Bound</option>
+                  <option value="ch7_linear">✨ Chapter 7B: Linearisation (Minimax &amp; Absolute Value)</option>
+                  <option value="exam_full">🔥 Full Exam Master Problem (Simplex + Duality + Sensitivity)</option>
+                </select>
+              </div>
+
+              <div class="form-col">
+                <label class="small font-semibold">🎯 Choose Difficulty Mode:</label>
+                <div class="diff-mode-pills mt-025" id="ocrDiffPills">
+                  <button type="button" class="diff-pill" data-diff="easy">🟢 Easy</button>
+                  <button type="button" class="diff-pill active" data-diff="medium">🟡 Medium</button>
+                  <button type="button" class="diff-pill" data-diff="hard">🔴 Hard</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Generated Exercise Display Box -->
+            <div id="ocrActiveChallengeContainer" class="mt-075">
+              <!-- Populated automatically or when clicking Generate Exercise -->
+            </div>
+          </div>
+
+          <div class="corrector-studio-grid mt-1">
+            <!-- Left: Scanner & Whiteboard Input -->
+            <div class="card">
+              <div class="flex-between">
+                <div>
+                  <span class="badge badge-amber">📸 STEP 2: SEND PHOTO OF YOUR HANDWRITTEN SOLUTION</span>
+                  <h2 class="mt-05">Upload Photo, Take Camera Shot, or Draw</h2>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btnFillSampleSolution">
+                  ✨ Load Sample Handwritten Solution
+                </button>
+              </div>
+
+              <div class="form-col mt-1">
+                <label class="small font-semibold">1. Target Exercise Being Graded:</label>
+                <select id="ocrExerciseSelect" class="select-modern mt-025">
+                  <option value="ocr_generated">🎲 Active AI-Generated Chapter Exercise (Above)</option>
+                  <option value="auto">🔍 Auto-detect any problem from my photo / free scratchpad</option>
+                </select>
+              </div>
+
+              <div class="segmented-tabs mt-1">
+                <button class="seg-btn ocr-mode-btn active" data-ocrmode="upload">
+                  📤 Upload / Camera Photo (or Ctrl+V)
+                </button>
+                <button class="seg-btn ocr-mode-btn" data-ocrmode="draw">
+                  ✏️ Interactive Math Whiteboard (Draw)
+                </button>
+              </div>
+
+              <!-- Upload Dropzone -->
+              <div class="ocr-mode-view active" id="ocrmode-upload">
+                <div class="modern-dropzone" id="ocrDropzone">
+                  <input type="file" id="ocrFileInput" accept="image/*" hidden />
+                  <input type="file" id="ocrCameraInput" accept="image/*" capture="environment" hidden />
+                  <div id="ocrDropzonePrompt">
+                    <div class="dropzone-icon">📷</div>
+                    <h4>Snap or Upload a Photo of Your Solved Exercise</h4>
+                    <p class="muted small">Drag &amp; drop an image, press <code>Ctrl+V</code>, or use the buttons below:</p>
+                    <div class="action-bar mt-075" style="justify-content:center;">
+                      <button type="button" class="btn btn-primary btn-sm" id="btnTriggerCamera">
+                        📱 Take Photo with Camera
+                      </button>
+                      <button type="button" class="btn btn-secondary btn-sm" id="btnTriggerBrowse">
+                        📂 Choose Image File
+                      </button>
+                    </div>
+                  </div>
+                  <div class="hidden" id="ocrPreviewWrap">
+                    <img id="ocrImagePreview" alt="Solution preview" />
+                    <div class="mt-05 action-bar" style="justify-content:center;">
+                      <button type="button" class="btn btn-secondary btn-sm" id="btnRetakeCamera">📷 Change Photo</button>
+                      <button type="button" class="btn btn-danger btn-sm" id="btnClearOcrImage">🗑️ Remove Image</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Whiteboard Canvas -->
+              <div class="ocr-mode-view" id="ocrmode-draw">
+                <div class="whiteboard-bar">
+                  <div class="pen-colors">
+                    <button class="color-dot active" id="btnSketchPen" style="background:#0f172a" title="Black Pen"></button>
+                    <button class="color-dot" id="btnSketchBlue" style="background:#2563eb" title="Blue Pen"></button>
+                    <button class="color-dot" id="btnSketchRed" style="background:#dc2626" title="Red Pen"></button>
+                  </div>
+                  <div class="action-bar">
+                    <button class="btn btn-ghost btn-sm" id="btnSketchSample">✨ Draw Sample Solution (with Error)</button>
+                    <button class="btn btn-ghost btn-sm" id="btnSketchClear">🧹 Clear</button>
+                  </div>
+                </div>
+                <canvas id="ocrSketchCanvas" width="640" height="340"></canvas>
+              </div>
+
+              <div class="form-col mt-1">
+                <label class="small font-semibold">2. Additional typed notes or final answers (optional):</label>
+                <textarea
+                  id="ocrStudentText"
+                  class="modern-textarea mt-025"
+                  rows="3"
+                  placeholder="E.g.: Here is my photo for the generated exercise! Please check my tableaux, pivots, and final Z*..."
+                ></textarea>
+              </div>
+
+              <button class="btn btn-primary btn-lg w-full mt-1" id="btnRunOcrCorrector">
+                🔍 Scan My Photo &amp; Grade My Solution Step-by-Step
+              </button>
+            </div>
+
+            <!-- Right: Evaluation Report Card -->
+            <div class="card" id="ocrResultPane">
+              <div class="empty-report">
+                <div class="empty-report-icon">🎯</div>
+                <h3>Your Step-by-Step AI Grading Report Will Appear Here</h3>
+                <p class="muted">
+                  <strong>How it works:</strong><br/>
+                  1️⃣ Generate an exercise by <strong>Chapter &amp; Difficulty (Easy / Medium / Hard)</strong> above.<br/>
+                  2️⃣ Solve it on paper, snap a photo (or draw on the whiteboard), and click <strong>"Scan My Photo &amp; Grade"</strong>!
+                </p>
+                <div class="report-steps-preview">
+                  <div class="rsp-item"><span>1</span> Exact LaTeX OCR Transcription of your handwritten notebook</div>
+                  <div class="rsp-item"><span>2</span> Line-by-line check against the Certified Chapter Solution</div>
+                  <div class="rsp-item"><span>3</span> Pinpoint diagnosis of any pivot, ratio $b_i/a_{ie}$, or sign mistake</div>
+                  <div class="rsp-item"><span>4</span> Final score out of 20 + Side-by-side Model Solution</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 6: DEDICATED AI TEACHER PAGE                              -->
+        <!-- ============================================================== -->
+        <section class="view-panel" id="view-teacher">
+          <div class="card full-chat-card">
+            <div class="chat-card-header">
+              <div class="teacher-identity">
+                <div class="avatar-circle">👨‍🏫</div>
+                <div>
+                  <h3>Prof. OR — Operations Research AI Tutor</h3>
+                  <p class="muted small">Complete Curriculum Expert (Univ. Oran 1 ING3-SI) • Powered by NVIDIA NIM</p>
+                </div>
+              </div>
+              <div class="chat-controls">
+                <button type="button" class="btn btn-emerald btn-sm" id="btnPlotGraphInChat">
+                  📈 Plot 2D Graph / Tree in Chat
+                </button>
+                <select id="teacherLangSelect" class="select-modern w-auto">
+                  <option value="en">🇬🇧 English</option>
+                  <option value="fr">🇫🇷 Français</option>
+                  <option value="darija">🇩🇿 Darija + English/French</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" id="btnClearChat">🗑️ Clear</button>
+              </div>
+            </div>
+
+            <div class="prompt-pills-scroll">
+              <button class="prompt-chip" data-prompt="Solve Max Z = 5x1 + 4x2 subject to 2x1 + x2 <= 12, x1 + 2x2 <= 9, x1, x2 >= 0 using the 2D Graphical Method (corner points and iso-profit line) and show the graph!">
+                📈 Solve &amp; Plot 2D Graphical LP
+              </button>
+              <button class="prompt-chip" data-prompt="Explain the difference between the two sign conventions for the (c_j - z_j) row in a Simplex tableau with a quick example.">
+                💡 $(c_j - z_j)$ Sign Conventions
+              </button>
+              <button class="prompt-chip" data-prompt="Show me the exact step-by-step recipe to find the sensitivity range for c_2 and b_2 from the final Simplex tableau.">
+                🎛️ Sensitivity Range of $c_k$ &amp; $b_i$
+              </button>
+              <button class="prompt-chip" data-prompt="Explain how to deduce the optimal Dual solution (y_1*, y_2*, y_3*) using Complementary Slackness without running Simplex on the Dual.">
+                🤝 Complementary Slackness Recipe
+              </button>
+              <button class="prompt-chip" data-prompt="How does the Big-M method work in Tableau 0 when there is a >= constraint? How do we eliminate M from the Z-row?">
+                🚨 Big-M Method in Tableau 0
+              </button>
+              <button class="prompt-chip" data-prompt="Explain the two linearisation tricks from Final Exam Exercise 3: Min max(f1, f2) and absolute value |x2 - 10|.">
+                ✨ Linearisation Tricks (4 Easy Pts)
+              </button>
+              <button class="prompt-chip" data-prompt="Give me a 3-question practice quiz covering Simplex, Duality, and Branch-and-Bound to test my exam readiness!">
+                🎯 Practice Exam Quiz
+              </button>
+            </div>
+
+            <div class="chat-stream" id="teacherChatMessages">
+              <div class="chat-msg assistant">
+                <div class="msg-sender">👨‍🏫 Prof. OR <span class="badge badge-blue">NVIDIA NIM AI</span></div>
+                <div class="msg-bubble markdown-body">
+                  <p>Welcome to <strong>OR MasterLab</strong>! 👋 I am <strong>Prof. OR</strong>, your AI Professor for Operations Research.</p>
+                  <p>Click any quick topic above or ask me any question about your 7 chapters, TD1–TD4 worksheets, or the Final Exam!</p>
+                </div>
+              </div>
+            </div>
+
+            <form class="chat-composer" id="teacherChatForm">
+              <textarea
+                id="teacherChatInput"
+                class="composer-input"
+                rows="2"
+                placeholder="Ask Prof. OR anything (Press Enter to send)..."
+              ></textarea>
+              <button type="submit" class="btn btn-primary btn-send">
+                Send 🚀
+              </button>
+            </form>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- SLIDE-OVER AI TUTOR DRAWER (ACCESSIBLE FROM ANY SCREEN!)           -->
+    <!-- ================================================================== -->
+    <aside class="ai-drawer hidden" id="aiSlideDrawer">
+      <div class="drawer-resizer" id="drawerResizer" title="Drag left or right to resize drawer"></div>
+      <div class="drawer-header">
+        <div class="flex-between">
+          <div class="flex-start gap-05" style="align-items: center;">
+            <strong>👨‍🏫 Quick Ask Prof. OR</strong>
+            <span class="badge badge-blue" style="font-size:0.65rem; padding: 0.12rem 0.45rem;">AI Tutor</span>
+          </div>
+          <div class="flex-start gap-05" style="align-items: center;">
+            <div class="drawer-size-pill-group" id="drawerSizePills" title="Resize drawer (Compact / Medium / Wide / Maximize)">
+              <button type="button" class="btn-drawer-size" data-size="360" title="Compact (360px)">S</button>
+              <button type="button" class="btn-drawer-size active" data-size="520" title="Medium (520px)">M</button>
+              <button type="button" class="btn-drawer-size" data-size="760" title="Wide (760px)">L</button>
+              <button type="button" class="btn-drawer-size" data-size="max" id="btnToggleMaximizeDrawer" title="Maximize / Split View">⛶</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="btnCloseAiDrawer" title="Close drawer">✖</button>
+          </div>
+        </div>
+        <p class="small muted mt-025">Ask a question while staying right on your current chapter, exercise, or solver!</p>
+      </div>
+      <div class="drawer-messages" id="drawerChatMessages">
+        <div class="chat-msg assistant">
+          <div class="msg-bubble small">
+            Need help with what you are looking at? Ask me below!
+          </div>
+        </div>
+      </div>
+      <form class="drawer-composer" id="drawerChatForm">
+        <input
+          type="text"
+          id="drawerChatInput"
+          class="select-modern"
+          placeholder="E.g.: Why does e1 leave the basis here?"
+        />
+        <button type="submit" class="btn btn-primary btn-sm">➤</button>
+      </form>
+    </aside>
+  </div>
+
+  <!-- API KEY MODAL -->
+  <div class="modal-backdrop hidden" id="apiModalBackdrop">
+    <div class="modal-card">
+      <div class="flex-between">
+        <h3>⚙️ NVIDIA NIM API Key Configuration</h3>
+        <button class="btn btn-ghost btn-sm" id="btnCloseApiModal">✖</button>
+      </div>
+      <p class="muted small mt-05">
+        Your NVIDIA NIM API key is active and connected to <code>nvidia/nemotron-3.5-super-vl-120b-a12b</code> (Vision OCR &amp; Reasoning) and <code>nvidia/nemotron-3.5-lightning-30b-a3b</code>.
+      </p>
+      <div class="form-col mt-1">
+        <label class="small font-semibold">API Key (<code>nvapi-...</code>):</label>
+        <input
+          type="password"
+          id="apiKeyInput"
+          class="select-modern mt-025"
+          value="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"
+        />
+      </div>
+      <div class="action-bar mt-1">
+        <button class="btn btn-primary w-full" id="btnSaveApiKey">✅ Save &amp; Verify Connection</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/solvers.js"></script>
+  <script src="/data/chapters.js"></script>
+  <script src="/data/exercises.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

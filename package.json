@@ -1,0 +1,9 @@
+{
+  "name": "or-study-platform",
+  "version": "1.0.0",
+  "description": "Operations Research (RO) Interactive Study Platform with NVIDIA NIM AI Teacher, Exercise Generator, and Vision OCR Corrector",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
